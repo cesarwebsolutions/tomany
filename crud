@@ -1,0 +1,36 @@
+public function listar()
+    {
+        $usuarioslista = Grupos::all();
+        foreach($usuarioslista as $usuario){
+            $lista = $usuario->usuarios;
+        }
+
+        return $lista;
+    }
+
+    public function cadastrar(Request $request)
+    {
+        // dd($request->grupos);
+        $usuario = ModelsUsuarios::create($request->all());
+        // $usuario->grupos()->create($request->all());
+
+        if($request->has('grupos')){
+            $usuario->grupos()->sync($request->grupos);
+        }
+    }
+
+    public function atualizar(Request $request, $id)
+    {
+        $usuario = ModelsUsuarios::find($id);
+        // dd($request);
+        // $usuario = ModelsUsuarios::where('id', $id)->update([
+        //     'vc_nome' => $request->vc_nome]);
+        // dd($request->grupos);
+        $usuario->update([
+            'vc_nome' => $request->vc_nome
+        ]);
+
+        if ($request->has('grupos')) {
+            $usuario->grupos()->sync($request->grupos);
+        }
+    }
